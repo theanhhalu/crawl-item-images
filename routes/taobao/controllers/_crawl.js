@@ -9,10 +9,10 @@ exports._crawl = async (req, res, next) => {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     // essential selectors
-    const BUTTON_PLAY_VIDEO_SELECTOR = "div.vjs-center-container > .vjs-center-start.vjs-button";
-    const MAIN_PIC_SELECTOR = '.tb-item-info-l > div.tb-gallery > div.tb-main-pic';
-    const TB_THUMB_SELECTOR = '.tb-item-info-l > .tb-gallery > ul#J_UlThumb';
-    const LINK_THUMB_IMAGE = '.tb-item-info-l > .tb-gallery > ul#J_UlThumb > li:nth-child(INDEX) > div > a > img';
+    const BUTTON_PLAY_VIDEO_SELECTOR = "div.vjs-center-container > .vjs-center-start.vjs-button"; // play video to load link video
+    const MAIN_PIC_SELECTOR = '.tb-item-info-l > div.tb-gallery > div.tb-main-pic'; // get main pic
+    const TB_THUMB_SELECTOR = '.tb-item-info-l > .tb-gallery > ul#J_UlThumb'; // get thumbs
+    const LINK_THUMB_IMAGE = '.tb-item-info-l > .tb-gallery > ul#J_UlThumb > li:nth-child(INDEX) > div > a > img'; // get link thumb images
     let links =[];
 
     try {
@@ -22,7 +22,7 @@ exports._crawl = async (req, res, next) => {
         return res.status(500).json({msg:`Can't get to link item`, error: e});
     }
     // Check if having video item
-    const hasVideo = await page.$eval(MAIN_PIC_SELECTOR, video => ((" " + video.className + " ").replace(/[\t\r\n\f]/g, " ").indexOf('tb-video-mode') > -1));
+    const hasVideo = await page.$eval(MAIN_PIC_SELECTOR, video => ((" " + video.className + " ").replace(/[\t\r\n\f]/g, " ").indexOf('tb-video-mode') > -1)); // check video ìf exist class tb-video-
     if(hasVideo){
         try {
             await page.$eval(BUTTON_PLAY_VIDEO_SELECTOR, ele => ele.click());
