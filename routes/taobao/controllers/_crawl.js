@@ -42,6 +42,7 @@ exports._crawl = async (req, res, next) => {
         console.log(linkImage);
         links.push(utils.parseLink(linkImage));
     }
+    //create folder
     const itemID = utils.parseQuery(req.body.link).id; // get id_item
     const dir = Path.resolve(__dirname,`../files/${itemID}`); // create folder with name_item
     if(!fs.existsSync(dir)){
