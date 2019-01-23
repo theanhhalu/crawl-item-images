@@ -17,13 +17,14 @@ exports.crawl = async (req, res, next) => {
         ],
     });
     const page  = await browser.newPage();
-    page.setUserAgent(randomUA.generate());
+    await page.setUserAgent(randomUA.generate());
     const iLink = [];
     const TABPANE_SELECTOR = ".mod-detail-gallery > div.content > div.tab-pane";
     const IMAGES_SELECTOR = ".mod-detail-gallery > .content > #dt-tab > .tab-content-container > ul";
     const LINK_THUMB_IMAGE_SELECTOR = ".mod-detail-gallery > .content > #dt-tab > .tab-content-container > ul > li:nth-child(INDEX)";
     const OFFERID_SELECTOR = 'meta[name="b2c_auction"]';
     await page.goto(req.body.link).then( async (response) => {
+            console.log("Here!");
             // check login
             if(response.url().indexOf('https://login.1688.com/member/signin.htm') > -1){
                 const username = cfs.acc.USERNAME;
@@ -72,9 +73,9 @@ exports.crawl = async (req, res, next) => {
                     return res.status(500).json({msg:error});
                 };
             }
-            else {
-                return res.status(500).json({msg: "Redirected to unknown link!"})
-            }
+            // else {
+            //     return res.status(500).json({msg: "Redirected to unknown link!"})
+            // }
         // }
         // Get link images to ownload files
         try {
@@ -164,5 +165,5 @@ exports.crawl = async (req, res, next) => {
     .catch((err) => {
         console.log(err);
         return res.status(500).json({msg: err});
-    });
+    });    
 }
